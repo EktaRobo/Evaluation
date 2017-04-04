@@ -1,0 +1,24 @@
+<resources>
+    <string name="app_name">Recharge</string>
+    <string name="convenience_fees">Convenience Fees</string>
+    <string name="total">Total</string>
+    <string name="inr_550_00">INR 550.00</string>
+    <string name="amount">Amount</string>
+    <string name="default_number">9669496694</string>
+    <string name="service_number">Service Number</string>
+    <string name="airtel">Airtel</string>
+    <string name="merchant_name">Merchant Name</string>
+    <string name="cancel">Cancel</string>
+    <string name="pay">Pay</string>
+    <string name="operator">Operator</string>
+    <string name="mobile_number">Mobile Number</string>
+    <string name="enter_your_card_details">Enter your card details:</string>
+    <string name="or_select_from_your_saved_cards">Or Select from your saved cards:</string>
+    <string name="previous_transaction">Previous Transactions</string>
+    <string name="payment_success">Payment Success</string>
+    <string name="token_id">Token ID</string>
+    <string name="recharge_again">Recharge Again</string>
+    <string name="quit_app">Quit App</string>
+    <string name="invalid_card_data">Invalid Card Data</string>
+    <string name="stripe_problem">Stripe problem</string>
+</resources>

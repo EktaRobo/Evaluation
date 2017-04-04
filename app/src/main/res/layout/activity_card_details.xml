@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context="com.example.ekta.evaluation.CardDetailsActivity">
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:text="@string/enter_your_card_details"/>
+
+
+    <com.stripe.android.view.CardInputWidget
+        android:id="@+id/card_input_widget"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/pay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:background="@drawable/border"
+        android:text="@string/pay"/>
+
+    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
+              android:paddingTop="8dp"
+              android:paddingBottom="8dp"
+              android:text="@string/or_select_from_your_saved_cards"/>
+
+
+    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                            android:id="@+id/recycler_view"
+
+                                            android:layout_height="wrap_content">
+
+    </android.support.v7.widget.RecyclerView>
+
+
+
+</LinearLayout>

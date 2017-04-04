@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:orientation="vertical"
+    android:layout_height="match_parent"
+    tools:context="com.example.ekta.evaluation.PaymentSuccessActivity">
+
+    <android.support.v7.widget.CardView android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+
+        <LinearLayout android:layout_width="match_parent"
+                      android:layout_height="match_parent"
+                      android:orientation="vertical"
+                      android:padding="16dp">
+            <TextView android:layout_width="match_parent"
+                      android:gravity="center"
+                      android:background="@android:color/holo_green_light"
+                      android:text="@string/payment_success"
+                      android:layout_height="wrap_content"
+                      android:layout_marginBottom="8dp"
+                      android:padding="8dp"/>
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#ef9a9a"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/operator"/>
+
+                <TextView
+                    android:id="@+id/operator_name"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="" android:textColor="@android:color/holo_blue_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/mobile_number"/>
+
+                <TextView
+                    android:id="@+id/mobile_number"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="" android:textColor="@android:color/holo_blue_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:background="#ef9a9a"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/amount"/>
+
+                <TextView
+                    android:id="@+id/amount"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="" android:textColor="@android:color/holo_blue_dark"/>
+
+            </RelativeLayout>
+
+            <RelativeLayout android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal"
+                            android:padding="16dp">
+                <TextView android:layout_width="wrap_content"
+                          android:layout_height="wrap_content"
+                          android:text="@string/token_id"/>
+
+                <TextView
+                    android:id="@+id/token_id"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_alignParentEnd="true"
+                    android:layout_alignParentRight="true"
+                    android:text="" android:textColor="@android:color/holo_blue_dark"/>
+
+            </RelativeLayout>
+
+
+        </LinearLayout>
+
+    </android.support.v7.widget.CardView>
+
+        <android.support.v7.widget.AppCompatButton
+            android:layout_width="wrap_content"
+            android:layout_gravity="bottom|center"
+            android:layout_margin="16dp"
+            android:layout_height="wrap_content"
+            android:layout_alignParentEnd="true"
+            android:padding="8dp"
+            android:id="@+id/recharge_again"
+            android:layout_alignParentRight="true"
+            android:background="@drawable/border"
+            android:text="@string/recharge_again"/>
+
+</LinearLayout>
