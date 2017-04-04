@@ -21,4 +21,7 @@
     <string name="quit_app">Quit App</string>
     <string name="invalid_card_data">Invalid Card Data</string>
     <string name="stripe_problem">Stripe problem</string>
+    <string name="operator_name_error">Please Enter Operator Name</string>
+    <string name="invalid_mobile">Invalid Mobile Number</string>
+    <string name="amount_error">Please enter Amount</string>
 </resources>

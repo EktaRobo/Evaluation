@@ -1,4 +1,4 @@
-package com.example.ekta.evaluation;
+package com.example.ekta.evaluation.carddetailscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,27 +8,25 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.ekta.evaluation.PaymentSuccessActivity;
+import com.example.ekta.evaluation.R;
 import com.example.ekta.evaluation.adapters.SavedCardsAdapter;
 import com.example.ekta.evaluation.constants.Constants;
 import com.example.ekta.evaluation.data.DataRepository;
-import com.example.ekta.evaluation.data.DataSource;
 import com.example.ekta.evaluation.data.database.models.SavedCard;
 import com.example.ekta.evaluation.listeners.OnSavedCardClickedListener;
 import com.example.ekta.evaluation.models.RechargeDetails;
+import com.example.ekta.evaluation.utilities.LoaderDialogUtil;
 import com.stripe.android.Stripe;
-import com.stripe.android.TokenCallback;
 import com.stripe.android.exception.AuthenticationException;
 import com.stripe.android.model.Card;
-import com.stripe.android.model.Token;
 import com.stripe.android.view.CardInputWidget;
 
-public class CardDetailsActivity extends AppCompatActivity implements OnSavedCardClickedListener,
-        TokenCallback, DataSource.PaymentCallback{
+public class CardDetailsActivity extends AppCompatActivity implements OnSavedCardClickedListener,CardContract.View{
 
 
     private CardInputWidget mCardInputWidget;
-    private Stripe mStripe;
-    private DataRepository mDataRepository;
+    private CardContract.Presenter mPresenter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,42 +37,44 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
 
     private void init() {
         mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
-        initStripe();
+        mPresenter = new CardDetailPresenter(new DataRepository(), this);
         initRecyclerView();
         initClickListener();
     }
 
-    private void initStripe() {
-        try {
-            mStripe = new Stripe(this, Constants.PUBLISHABLE_KEY);
-        } catch (AuthenticationException e) {
-            e.printStackTrace();
-            Toast.makeText(CardDetailsActivity.this, R.string.stripe_problem, Toast.LENGTH_LONG)
-                    .show();
-        }
-    }
 
     private void initClickListener() {
         findViewById(R.id.pay).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Card cardToSave = mCardInputWidget.getCard();
+                Stripe stripe = null;
                 if (cardToSave == null) {
-                    Toast.makeText(CardDetailsActivity.this, R.string.invalid_card_data, Toast.LENGTH_LONG)
-                            .show();
+                    displayToast(getString(R.string.invalid_card_data));
                 } else {
-                    Toast.makeText(CardDetailsActivity.this, cardToSave.toString(), Toast.LENGTH_LONG)
-                            .show();
-                    mStripe.createToken(cardToSave, CardDetailsActivity.this);
+                    try {
+                        stripe = new Stripe(CardDetailsActivity.this, Constants
+                                .PUBLISHABLE_KEY);
+                    } catch (AuthenticationException e) {
+                        e.printStackTrace();
+                        displayToast(getString(R.string.stripe_problem));
+                    }
+                    mPresenter.createToken(stripe, cardToSave);
                 }
             }
         });
     }
 
+
+    @Override
+    public void displayToast(String message) {
+        Toast.makeText(CardDetailsActivity.this, message, Toast.LENGTH_LONG)
+                .show();
+    }
+
     private void initRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recycler_view);
-        mDataRepository = new DataRepository();
-        SavedCardsAdapter adapter = new SavedCardsAdapter(mDataRepository.getSavedCards(),
+        SavedCardsAdapter adapter = new SavedCardsAdapter(mPresenter.getSavedCards(),
                 this);
         LinearLayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
@@ -83,31 +83,14 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
 
     @Override
     public void onSavedCardClicked(SavedCard savedCard) {
-        Toast.makeText(CardDetailsActivity.this,
-                savedCard.getTokenId(),
-                Toast.LENGTH_LONG).show();
-        mDataRepository.makePayment(this, getRechargeDetails(), savedCard.getTokenId());
+        displayToast(savedCard.getTokenId());
+        mPresenter.makePayment(getRechargeDetails(), savedCard.getTokenId());
     }
+
+
 
     @Override
-    public void onError(Exception error) {
-        Toast.makeText(CardDetailsActivity.this,
-                error.getLocalizedMessage(),
-                Toast.LENGTH_LONG).show();
-
-    }
-
-    @Override
-    public void onSuccess(Token token) {
-        Toast.makeText(CardDetailsActivity.this,
-                token.getId(),
-                Toast.LENGTH_LONG).show();
-        mDataRepository.saveCard(token);
-
-        mDataRepository.makePayment(this, getRechargeDetails(), token.getId());
-    }
-
-    private RechargeDetails getRechargeDetails() {
+    public RechargeDetails getRechargeDetails() {
         Intent intent = getIntent();
         RechargeDetails rechargeDetails = null;
         if (intent != null) {
@@ -118,7 +101,7 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
     }
 
     @Override
-    public void onPaymentSuccess(RechargeDetails rechargeDetails, String tokenId) {
+    public void navigateToPaymentActivity(RechargeDetails rechargeDetails, String tokenId) {
         Intent paymentIntent = new Intent(CardDetailsActivity.this, PaymentSuccessActivity.class);
         paymentIntent.putExtra(Constants.RECHARGE_DETAILS, rechargeDetails);
         paymentIntent.putExtra(Constants.TOKEN_ID, tokenId);
@@ -127,8 +110,16 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
         finish();
     }
 
-    @Override
-    public void onPaymentFailure(String error) {
 
+
+    @Override
+    public void showProgress() {
+        LoaderDialogUtil.getInstance().showLoader(this);
     }
+
+    @Override
+    public void hideProgress() {
+        LoaderDialogUtil.getInstance().dismissLoader(this);
+    }
+
 }

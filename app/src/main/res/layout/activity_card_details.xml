@@ -6,11 +6,12 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:padding="16dp"
-    tools:context="com.example.ekta.evaluation.CardDetailsActivity">
+    tools:context="com.example.ekta.evaluation.carddetailscreen.CardDetailsActivity">
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:paddingTop="8dp"
               android:paddingBottom="8dp"
+              android:textColor="@color/colorPrimaryDark"
               android:text="@string/enter_your_card_details"/>
 
 
@@ -29,6 +30,7 @@
 
     <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
               android:paddingTop="8dp"
+              android:textColor="@color/colorPrimaryDark"
               android:paddingBottom="8dp"
               android:text="@string/or_select_from_your_saved_cards"/>
 
