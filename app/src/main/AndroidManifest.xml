@@ -12,16 +12,18 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".carddetailscreen.CardDetailsActivity">
+        <activity android:name=".ui.carddetailscreen.CardDetailsActivity">
         </activity>
-        <activity android:name=".RechargeActivity">
+        <activity android:name=".ui.rechargescreen.RechargeActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN"/>
 
                 <category android:name="android.intent.category.LAUNCHER"/>
             </intent-filter>
         </activity>
-        <activity android:name=".PaymentSuccessActivity">
+        <activity android:name=".ui.paymentsuccess.PaymentSuccessActivity">
+        </activity>
+        <activity android:name=".ui.rechargehistory.RechargeHistoryActivity">
         </activity>
     </application>
 

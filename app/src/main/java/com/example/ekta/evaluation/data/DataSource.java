@@ -16,6 +16,10 @@ public interface DataSource {
 
     ArrayList<SavedCard> getSavedCards();
 
+    void saveRechargeDetails(RechargeDetails rechargeDetails);
+
+    ArrayList<RechargeDetails> getSuccessfulRechargeDetailList();
+
     void makePayment(PaymentCallback paymentCallback, RechargeDetails rechargeDetails, String
             tokenId);
 

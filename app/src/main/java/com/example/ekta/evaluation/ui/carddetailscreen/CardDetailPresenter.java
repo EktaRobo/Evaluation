@@ -1,6 +1,5 @@
-package com.example.ekta.evaluation.carddetailscreen;
+package com.example.ekta.evaluation.ui.carddetailscreen;
 
-import com.example.ekta.evaluation.data.DataRepository;
 import com.example.ekta.evaluation.data.DataSource;
 import com.example.ekta.evaluation.data.database.models.SavedCard;
 import com.example.ekta.evaluation.models.RechargeDetails;
@@ -17,10 +16,10 @@ import java.util.ArrayList;
 
 public class CardDetailPresenter implements CardContract.Presenter, TokenCallback, DataSource
         .PaymentCallback {
-    private DataRepository mDataRepository;
+    private DataSource mDataRepository;
     private CardContract.View mView;
 
-    public CardDetailPresenter(DataRepository dataRepository, CardContract.View view) {
+    public CardDetailPresenter(DataSource dataRepository, CardContract.View view) {
         mDataRepository = dataRepository;
         mView = view;
     }
@@ -64,7 +63,8 @@ public class CardDetailPresenter implements CardContract.Presenter, TokenCallbac
 
     @Override
     public void onPaymentSuccess(RechargeDetails rechargeDetails, String tokenId) {
-        mView.navigateToPaymentActivity(rechargeDetails, tokenId);
+        mDataRepository.saveRechargeDetails(rechargeDetails);
+        mView.navigateToPaymentSuccessActivity(rechargeDetails, tokenId);
     }
 
 

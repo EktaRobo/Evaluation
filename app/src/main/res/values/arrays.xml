@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="operators_array">
+        <item>Airtel</item>
+        <item>Vodafone</item>
+        <item>Idea</item>
+        <item>Reliance Jio</item>
+        <item>BSNL</item>
+        <item>Aircel</item>
+        <item>TATA DoCoMo</item>
+        <item>MTNL</item>
+    </string-array>
+</resources>

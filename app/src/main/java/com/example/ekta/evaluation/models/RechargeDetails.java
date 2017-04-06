@@ -3,12 +3,17 @@ package com.example.ekta.evaluation.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by ekta on 4/4/17.
  */
 
-public class RechargeDetails implements Parcelable {
+public class RechargeDetails extends RealmObject implements Parcelable {
 
+    @PrimaryKey
+    private int mId;
     private String mOperatorName;
     private String mMobileNumber;
     private String mAmount;
@@ -33,6 +38,14 @@ public class RechargeDetails implements Parcelable {
             return new RechargeDetails[size];
         }
     };
+
+    public int getId() {
+        return mId;
+    }
+
+    public void setId(int id) {
+        mId = id;
+    }
 
     public String getOperatorName() {
         return mOperatorName;

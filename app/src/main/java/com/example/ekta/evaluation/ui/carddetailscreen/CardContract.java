@@ -1,4 +1,4 @@
-package com.example.ekta.evaluation.carddetailscreen;
+package com.example.ekta.evaluation.ui.carddetailscreen;
 
 import com.example.ekta.evaluation.data.database.models.SavedCard;
 import com.example.ekta.evaluation.models.RechargeDetails;
@@ -21,7 +21,7 @@ public interface CardContract {
 
         RechargeDetails getRechargeDetails();
 
-        void navigateToPaymentActivity(RechargeDetails rechargeDetails, String tokenId);
+        void navigateToPaymentSuccessActivity(RechargeDetails rechargeDetails, String tokenId);
     }
 
     interface Presenter {

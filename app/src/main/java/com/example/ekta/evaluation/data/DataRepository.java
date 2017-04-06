@@ -31,6 +31,16 @@ public class DataRepository implements DataSource{
     }
 
     @Override
+    public void saveRechargeDetails(RechargeDetails rechargeDetails) {
+        DatabaseHelper.addPaymentSuccessDetailsToDatabase(rechargeDetails);
+    }
+
+    @Override
+    public ArrayList<RechargeDetails> getSuccessfulRechargeDetailList() {
+        return DatabaseHelper.getRechargeHistory();
+    }
+
+    @Override
     public void makePayment(final PaymentCallback paymentCallback, final RechargeDetails rechargeDetails, final String tokenId) {
         Handler handler = new Handler();
         handler.postDelayed(new Runnable() {

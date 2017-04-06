@@ -12,4 +12,5 @@ public class Constants {
     public static final String PUBLISHABLE_KEY = "pk_test_o0n8tWdSDCKolLWryrSDnVO7";
     public static final int MAX_LENGTH_MOBILE = 10;
     public static final String EMPTY = "";
+    public static final String RS = "Rs. ";
 }

@@ -1,4 +1,4 @@
-package com.example.ekta.evaluation.carddetailscreen;
+package com.example.ekta.evaluation.ui.carddetailscreen;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -8,14 +8,14 @@ import android.support.v7.widget.RecyclerView;
 import android.view.View;
 import android.widget.Toast;
 
-import com.example.ekta.evaluation.PaymentSuccessActivity;
 import com.example.ekta.evaluation.R;
 import com.example.ekta.evaluation.adapters.SavedCardsAdapter;
+import com.example.ekta.evaluation.application.App;
 import com.example.ekta.evaluation.constants.Constants;
-import com.example.ekta.evaluation.data.DataRepository;
 import com.example.ekta.evaluation.data.database.models.SavedCard;
 import com.example.ekta.evaluation.listeners.OnSavedCardClickedListener;
 import com.example.ekta.evaluation.models.RechargeDetails;
+import com.example.ekta.evaluation.ui.paymentsuccess.PaymentSuccessActivity;
 import com.example.ekta.evaluation.utilities.LoaderDialogUtil;
 import com.stripe.android.Stripe;
 import com.stripe.android.exception.AuthenticationException;
@@ -37,7 +37,7 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
 
     private void init() {
         mCardInputWidget = (CardInputWidget) findViewById(R.id.card_input_widget);
-        mPresenter = new CardDetailPresenter(new DataRepository(), this);
+        mPresenter = new CardDetailPresenter(App.getDataRepository(), this);
         initRecyclerView();
         initClickListener();
     }
@@ -101,7 +101,7 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
     }
 
     @Override
-    public void navigateToPaymentActivity(RechargeDetails rechargeDetails, String tokenId) {
+    public void navigateToPaymentSuccessActivity(RechargeDetails rechargeDetails, String tokenId) {
         Intent paymentIntent = new Intent(CardDetailsActivity.this, PaymentSuccessActivity.class);
         paymentIntent.putExtra(Constants.RECHARGE_DETAILS, rechargeDetails);
         paymentIntent.putExtra(Constants.TOKEN_ID, tokenId);

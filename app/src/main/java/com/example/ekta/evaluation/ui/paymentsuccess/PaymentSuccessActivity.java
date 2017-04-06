@@ -1,4 +1,4 @@
-package com.example.ekta.evaluation;
+package com.example.ekta.evaluation.ui.paymentsuccess;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,8 +6,10 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.TextView;
 
+import com.example.ekta.evaluation.R;
 import com.example.ekta.evaluation.constants.Constants;
 import com.example.ekta.evaluation.models.RechargeDetails;
+import com.example.ekta.evaluation.ui.rechargescreen.RechargeActivity;
 
 public class PaymentSuccessActivity extends AppCompatActivity {
 

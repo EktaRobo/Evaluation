@@ -12,7 +12,7 @@ import com.example.ekta.evaluation.constants.Constants;
  */
 public class LoaderDialogUtil {
 
-    static LoaderDialogUtil sDialogUtil;
+    private static LoaderDialogUtil sDialogUtil;
 
     private LoaderDialogUtil() {
 

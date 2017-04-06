@@ -1,6 +1,7 @@
 package com.example.ekta.evaluation.data.database;
 
 import com.example.ekta.evaluation.data.database.models.SavedCard;
+import com.example.ekta.evaluation.models.RechargeDetails;
 
 import java.util.ArrayList;
 
@@ -24,11 +25,36 @@ public class DatabaseHelper {
 
     public static ArrayList<SavedCard> getAllSavedCards() {
         Realm realm = Realm.getDefaultInstance();
-        ArrayList<SavedCard> savedCards = new ArrayList<>(realm.where(SavedCard.class).findAll());
-        if (savedCards == null) {
-            return null;
+        return new ArrayList<>(realm.where(SavedCard.class).findAll());
+
+    }
+
+    public static void addPaymentSuccessDetailsToDatabase(final RechargeDetails rechargeDetails) {
+        Realm realm = Realm.getDefaultInstance();
+        rechargeDetails.setId(getNextKey(realm));
+        realm.executeTransaction(new Realm.Transaction() {
+            @Override
+            public void execute(Realm realm) {
+                realm.copyToRealmOrUpdate(rechargeDetails);
+            }
+        });
+    }
+
+    private static int getNextKey(Realm realm)
+    {
+        try {
+            return realm.where(RechargeDetails.class).max("mId").intValue() + 1;
+        } catch (ArrayIndexOutOfBoundsException e) {
+            return 0;
+        } catch (NullPointerException e) {
+            return 0;
         }
-        return savedCards;
+    }
+
+    public static ArrayList<RechargeDetails> getRechargeHistory() {
+        Realm realm = Realm.getDefaultInstance();
+
+        return new ArrayList<>(realm.where(RechargeDetails.class).findAll());
 
     }
 }

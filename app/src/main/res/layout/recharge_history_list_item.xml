@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+                android:layout_width="match_parent"
+              android:orientation="vertical"
+                android:layout_height="wrap_content"
+                android:padding="16dp">
+
+    <TextView android:id="@+id/operator_name"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="Airtel"/>
+
+    <TextView android:layout_width="wrap_content"
+              android:layout_gravity="right"
+              android:id="@+id/amount"
+              android:text="Rs 500"
+              android:layout_height="wrap_content"
+              android:layout_alignParentRight="true"/>
+
+    <TextView android:id="@+id/mobile_number"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:text="7829020660"/>
+
+</LinearLayout>
