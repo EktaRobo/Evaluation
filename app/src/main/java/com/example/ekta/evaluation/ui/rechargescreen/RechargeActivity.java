@@ -1,12 +1,16 @@
 package com.example.ekta.evaluation.ui.rechargescreen;
 
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.text.InputFilter;
 import android.text.method.DigitsKeyListener;
 import android.view.Gravity;
@@ -17,11 +21,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ekta.evaluation.R;
-import com.example.ekta.evaluation.ui.carddetailscreen.CardDetailsActivity;
+import com.example.ekta.evaluation.adapters.RechargeDetailAdapter;
+import com.example.ekta.evaluation.application.App;
 import com.example.ekta.evaluation.constants.Constants;
 import com.example.ekta.evaluation.models.RechargeDetails;
-import com.example.ekta.evaluation.ui.rechargehistory.RechargeHistoryActivity;
+import com.example.ekta.evaluation.ui.carddetailscreen.CardDetailsActivity;
+import com.example.ekta.evaluation.utilities.ContactsDialogFragment;
 
+@RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class RechargeActivity extends AppCompatActivity implements AdapterView
         .OnItemSelectedListener {
     private AppCompatEditText mMobileNumberEditText;
@@ -36,30 +43,57 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
         init();
     }
 
+
     private void init() {
         AppCompatSpinner operatorNameSpinner = (AppCompatSpinner) findViewById(R.id.operator_name);
-// Create an ArrayAdapter using the string array and a default mOperatorNameSpinner layout
+        setAdapterForSpinners(operatorNameSpinner, R.array.operators_array);
+        mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
+
+        mMobileNumberEditText = (AppCompatEditText) findViewById(R.id.contact_number);
+        RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recharge_history_list);
+        RechargeDetailAdapter rechargeDetailAdapter = new RechargeDetailAdapter(App
+                .getDataRepository().getSuccessfulRechargeDetailList());
+        LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(rechargeDetailAdapter);
+        /*mMobileNumberEditText.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                if(MotionEvent.ACTION_UP == event.getAction()) {
+                    View horizontalView = findViewById(R.id.horizontal_view);
+                    horizontalView.setBackgroundColor(ContextCompat.getColor(RechargeActivity.this, R
+                            .color
+                            .colorPrimaryDark));
+                }
+
+                return false; // return is important...
+            }
+        });*/
+
+//        mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
+        setRestrictions();
+        /*findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                onBackPressed();
+            }
+        });*/
+        initClickListeners();
+    }
+
+    private void setAdapterForSpinners(AppCompatSpinner operatorNameSpinner, int array_list) {
+        // Create an ArrayAdapter using the string array and a default mOperatorNameSpinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
-                R.array.operators_array, android.R.layout.simple_spinner_item);
+                array_list, android.R.layout.simple_spinner_item);
         operatorNameSpinner.setOnItemSelectedListener(this);
 // Specify the layout to use when the list of choices appears
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the mOperatorNameSpinner
         operatorNameSpinner.setAdapter(adapter);
-        mMobileNumberEditText = (AppCompatEditText) findViewById(R.id.mobile_number);
-        mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
-        setRestrictions();
-        findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });
-        initClickListeners();
     }
 
     private void initClickListeners() {
-        findViewById(R.id.pay).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.recharge).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (mOperatorName.equals("") || mOperatorName == null) {
@@ -79,7 +113,16 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
             }
         });
 
-        findViewById(R.id.previous_transaction).setOnClickListener(new View.OnClickListener() {
+        findViewById(R.id.contacts).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                ContactsDialogFragment contactsDialogFragment = new ContactsDialogFragment();
+                contactsDialogFragment.show(getSupportFragmentManager(), ContactsDialogFragment
+                        .class.getSimpleName());
+            }
+        });
+
+        /*findViewById(R.id.previous_transaction).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent previousTransactionHistory = new Intent(RechargeActivity.this,
@@ -87,7 +130,7 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
                 startActivity(previousTransactionHistory);
 
             }
-        });
+        });*/
     }
 
     public void displayToast(String message) {

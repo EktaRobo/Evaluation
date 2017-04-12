@@ -1,15 +1,10 @@
 package com.example.ekta.evaluation.ui.paymentsuccess;
 
-import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.widget.TextView;
 
 import com.example.ekta.evaluation.R;
-import com.example.ekta.evaluation.constants.Constants;
-import com.example.ekta.evaluation.models.RechargeDetails;
-import com.example.ekta.evaluation.ui.rechargescreen.RechargeActivity;
 
 public class PaymentSuccessActivity extends AppCompatActivity {
 
@@ -17,10 +12,16 @@ public class PaymentSuccessActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_payment_success);
-        init();
+        findViewById(R.id.close).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                finish();
+            }
+        });
+//        init();
     }
 
-    private void init() {
+    /*private void init() {
         Intent intent = getIntent();
         RechargeDetails rechargeDetails;
         if (intent != null) {
@@ -52,5 +53,5 @@ public class PaymentSuccessActivity extends AppCompatActivity {
                 startActivity(rechargeIntent);
             }
         });
-    }
+    }*/
 }

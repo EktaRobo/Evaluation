@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,40 +8,61 @@
     android:padding="16dp"
     tools:context=".ui.carddetailscreen.CardDetailsActivity">
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:paddingTop="8dp"
+    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+               android:id="@+id/enter_card_arrow"
+               android:padding="8dp"
+    android:src="@drawable/ic_keyboard_arrow_right_black_24px"/>
+
+    <TextView android:id="@+id/enter_card_details" android:layout_width="wrap_content"
+              android:layout_toRightOf="@id/enter_card_arrow"
+              android:layout_height="wrap_content"
               android:paddingBottom="8dp"
-              android:textColor="@color/colorPrimaryDark"
-              android:text="@string/enter_your_card_details"/>
+              android:paddingTop="8dp"
+              android:text="@string/enter_your_card_details"
+              android:textSize="18sp"
+              android:textColor="@color/colorPrimaryDark"/>
 
 
     <com.stripe.android.view.CardInputWidget
         android:id="@+id/card_input_widget"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
-
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/pay"
-        android:layout_width="wrap_content"
+        android:layout_toRightOf="@id/enter_card_arrow"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:background="@drawable/border"
-        android:text="@string/pay"/>
+        android:layout_below="@id/enter_card_details"
+        android:visibility="gone"/>
 
-    <TextView android:layout_width="wrap_content" android:layout_height="wrap_content"
-              android:paddingTop="8dp"
-              android:textColor="@color/colorPrimaryDark"
+    <ImageView android:layout_width="wrap_content" android:layout_height="wrap_content"
+               android:id="@+id/select_card_arrow"
+               android:padding="8dp"
+               android:layout_below="@id/card_input_widget"
+               android:src="@drawable/ic_keyboard_arrow_right_black_24px"/>
+
+
+    <TextView android:id="@+id/select_from_previous_cards" android:layout_width="wrap_content"
+              android:layout_height="wrap_content"
+              android:layout_toRightOf="@id/select_card_arrow"
+              android:layout_below="@id/card_input_widget"
               android:paddingBottom="8dp"
-              android:text="@string/or_select_from_your_saved_cards"/>
+              android:paddingTop="8dp"
+              android:textSize="18sp"
+              android:text="@string/or_select_from_your_saved_cards"
+              android:textColor="@color/colorPrimaryDark"/>
 
 
-    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
-                                            android:id="@+id/recycler_view"
-
-                                            android:layout_height="wrap_content">
+    <android.support.v7.widget.RecyclerView android:id="@+id/recycler_view"
+                                            android:visibility="gone"
+                                            android:layout_width="match_parent"
+                                            android:layout_toRightOf="@id/select_card_arrow"
+                                            android:layout_height="wrap_content"
+                                            android:layout_below="@id/select_from_previous_cards">
 
     </android.support.v7.widget.RecyclerView>
 
-
-
-</LinearLayout>
+    <android.support.v7.widget.AppCompatButton
+        android:id="@+id/pay"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:background="@android:color/holo_green_light"
+        android:text="@string/pay"/>
+</RelativeLayout>

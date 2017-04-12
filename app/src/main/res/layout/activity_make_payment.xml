@@ -3,137 +3,114 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:padding="16dp">
-    <android.support.v7.widget.AppCompatButton
-        android:id="@+id/previous_transaction"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentBottom="true"
-        android:layout_centerInParent="true"
-        android:background="@drawable/border"
-        android:padding="8dp"
-        android:layout_marginTop="16dp"
-        android:text="@string/previous_transaction"
-        android:visibility="visible"/>
 
     <android.support.v7.widget.CardView
         android:id="@+id/card_view"
         android:layout_width="match_parent"
-        android:layout_above="@id/previous_transaction"
-        android:layout_height="match_parent" >
+        android:layout_height="wrap_content">
+
         <LinearLayout android:layout_width="match_parent"
                       android:layout_height="match_parent"
                       android:orientation="vertical"
                       android:padding="16dp">
-            <RelativeLayout android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#ef9a9a"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
+
+            <FrameLayout android:layout_width="match_parent"
+                          android:layout_height="wrap_content"
+                          android:gravity="center"
+                          android:orientation="horizontal">
+
+
                 <TextView android:layout_width="wrap_content"
                           android:layout_height="wrap_content"
-                          android:text="@string/operator"/>
+                          android:layout_gravity="center_vertical"
+                          android:text="@string/_91"
+                          android:textSize="20sp"/>
 
-                <android.support.v7.widget.AppCompatSpinner
-                    android:id="@+id/operator_name"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentEnd="true"
-                    android:layout_alignParentRight="true"
-                    android:background="@null"
-                    android:gravity="center"
-                    android:text="" android:textColor="@color/colorPrimaryDark"/>
+                <android.support.v7.widget.AppCompatEditText
+                    android:id="@+id/contact_number"
+                    android:layout_width="match_parent"
+                    android:textAlignment="center"
+                    android:textSize="20sp"
+                    android:paddingBottom="16dp"
+                    android:gravity="left"
+                    android:imeOptions="actionNext"
+                    android:hint="@string/enter_your_number"
+                    android:layout_height="wrap_content"/>
 
-            </RelativeLayout>
+                <ImageView android:layout_width="wrap_content"
+                           android:layout_height="wrap_content"
+                           android:id="@+id/contacts"
+                           android:layout_gravity="right|center_vertical"
+                           android:src="@drawable/ic_contacts_black_24px"/>
 
-            <RelativeLayout android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
-                <TextView android:layout_width="wrap_content"
+            </FrameLayout>
+
+            <LinearLayout android:layout_width="match_parent"
                           android:layout_height="wrap_content"
-                          android:text="@string/mobile_number"/>
-                <FrameLayout android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:layout_alignParentEnd="true"
-                             android:layout_alignParentRight="true">
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
+                          android:orientation="horizontal"
+                          android:layout_marginTop="16dp"
+                          android:padding="8dp">
+
+                    <android.support.v7.widget.AppCompatSpinner
+                        android:id="@+id/operator_name"
+                        android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:text="7829020660"
-                        android:textSize="20sp"
-                        android:visibility="invisible"/>
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/mobile_number"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="right"
-                        android:inputType="number"
-                        android:maxLength="10"
-                        android:text="" android:textColor="@color/colorPrimaryDark"/>
-                </FrameLayout>
-
-            </RelativeLayout>
-
-            <RelativeLayout android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:background="#ef9a9a"
-                            android:orientation="horizontal"
-                            android:padding="16dp">
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="@string/amount"/>
-
-                <FrameLayout android:layout_width="wrap_content"
-                             android:layout_height="wrap_content"
-                             android:layout_alignParentEnd="true"
-                             android:layout_alignParentRight="true">
-                    <android.support.v7.widget.AppCompatTextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00000"
-                        android:textSize="20sp"
-                        android:visibility="invisible"/>
+                        android:layout_weight="1"
+                        android:layout_marginRight="4dp"
+                    />
 
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/amount"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="right"
-                        android:inputType="number"
-                        android:maxLength="4"
-                        android:text="" android:textColor="@color/colorPrimaryDark"/>
-                </FrameLayout>
-
-            </RelativeLayout>
-
-
-        </LinearLayout>
-
-        <RelativeLayout android:layout_width="match_parent"
+                        android:layout_width="wrap_content"
+                        android:text=""
+                        android:hint="@string/amount"
+                        android:imeOptions="actionDone"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
-                        android:padding="16dp">
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/cancel_action"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="@drawable/border"
-                android:text="@string/cancel"/>
-            <android.support.v7.widget.AppCompatButton
-                android:id="@+id/pay"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_alignParentEnd="true"
-                android:layout_alignParentRight="true"
-                android:background="@drawable/border"
-                android:text="@string/pay"/>
+                        android:maxLength="4"
+                        android:gravity="right"
+                        android:layout_marginLeft="4dp"/>
+            </LinearLayout>
 
-        </RelativeLayout>
+            <RadioGroup android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="8dp"
+                        android:orientation="horizontal">
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/prepaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginRight="8dp"
+                    android:checked="true"
+                    android:text="@string/prepaid"/>
+                <android.support.v7.widget.AppCompatRadioButton
+                    android:id="@+id/postpaid"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="8dp"
+                    android:text="@string/postpaid"/>
+            </RadioGroup>
 
-
+            <android.support.v7.widget.AppCompatButton android:layout_width="match_parent"
+                                                       android:id="@+id/recharge"
+                                                       android:layout_height="wrap_content"
+                                                       android:layout_marginTop="16dp"
+                                                       android:background="@android:color/holo_green_light"
+                                                       android:text="@string/recharge"
+                                                       android:textAllCaps="false"
+                                                       android:textColor="@android:color/white"/>
+        </LinearLayout>
     </android.support.v7.widget.CardView>
 
+    <TextView android:id="@+id/history"
+              android:text="@string/history"
+              android:layout_below="@id/card_view"
+              android:paddingTop="16dp"
+              android:layout_width="wrap_content"
+              android:layout_height="wrap_content"/>
 
+    <android.support.v7.widget.RecyclerView android:layout_width="match_parent"
+                                            android:layout_below="@id/history"
+                                            android:paddingTop="16dp"
+                                            android:id="@+id/recharge_history_list"
+                                            android:layout_height="wrap_content"/>
 </RelativeLayout>

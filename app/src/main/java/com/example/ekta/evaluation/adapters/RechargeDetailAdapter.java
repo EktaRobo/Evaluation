@@ -54,7 +54,7 @@ public class RechargeDetailAdapter extends RecyclerView.Adapter<RechargeDetailAd
         public ViewHolder(View itemView) {
             super(itemView);
             mOperatorName = (TextView) itemView.findViewById(R.id.operator_name);
-            mMobileNumber = (TextView) itemView.findViewById(R.id.mobile_number);
+            mMobileNumber = (TextView) itemView.findViewById(R.id.contact_number);
             mAmount = (TextView) itemView.findViewById(R.id.amount);
         }
     }

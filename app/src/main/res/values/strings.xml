@@ -24,4 +24,13 @@
     <string name="operator_name_error">Please Enter Operator Name</string>
     <string name="invalid_mobile">Invalid Mobile Number</string>
     <string name="amount_error">Please enter Amount</string>
+    <string name="_91">+91 - </string>
+    <string name="character">|</string>
+    <string name="prepaid">Prepaid</string>
+    <string name="postpaid">Postpaid</string>
+    <string name="recharge">Recharge</string>
+    <string name="enter_your_number">Enter your number</string>
+    <string name="history">History</string>
+    <string name="yayy_your_recharge_was_successful">Yayy!! Your Recharge Was Successful!! :)
+    </string>
 </resources>

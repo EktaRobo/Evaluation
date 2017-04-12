@@ -39,6 +39,7 @@ public class CardDetailPresenter implements CardContract.Presenter, TokenCallbac
 
     @Override
     public void makePayment(RechargeDetails rechargeDetails, String tokenId) {
+        mView.showProgress();
         mDataRepository.makePayment(this, getRechargeDetails(), tokenId);
     }
 
@@ -63,6 +64,7 @@ public class CardDetailPresenter implements CardContract.Presenter, TokenCallbac
 
     @Override
     public void onPaymentSuccess(RechargeDetails rechargeDetails, String tokenId) {
+        mView.hideProgress();
         mDataRepository.saveRechargeDetails(rechargeDetails);
         mView.navigateToPaymentSuccessActivity(rechargeDetails, tokenId);
     }

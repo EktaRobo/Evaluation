@@ -6,6 +6,8 @@ import com.example.ekta.evaluation.models.RechargeDetails;
 import java.util.ArrayList;
 
 import io.realm.Realm;
+import io.realm.RealmResults;
+import io.realm.Sort;
 
 /**
  * Created by ekta on 4/4/17.
@@ -54,7 +56,9 @@ public class DatabaseHelper {
     public static ArrayList<RechargeDetails> getRechargeHistory() {
         Realm realm = Realm.getDefaultInstance();
 
-        return new ArrayList<>(realm.where(RechargeDetails.class).findAll());
+        RealmResults<RechargeDetails> result = realm.where(RechargeDetails.class).findAll();
+        result = result.sort("mId", Sort.DESCENDING);
+        return new ArrayList<>(result);
 
     }
 }
