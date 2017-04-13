@@ -1,8 +1,12 @@
 package com.example.ekta.evaluation.ui.rechargescreen;
 
+import android.app.Activity;
 import android.content.Intent;
+import android.database.Cursor;
+import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.provider.ContactsContract;
 import android.support.annotation.NonNull;
 import android.support.annotation.RequiresApi;
 import android.support.v4.content.ContextCompat;
@@ -11,8 +15,11 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
 import android.text.InputFilter;
+import android.text.TextWatcher;
 import android.text.method.DigitsKeyListener;
+import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
 import android.widget.AdapterView;
@@ -26,11 +33,14 @@ import com.example.ekta.evaluation.application.App;
 import com.example.ekta.evaluation.constants.Constants;
 import com.example.ekta.evaluation.models.RechargeDetails;
 import com.example.ekta.evaluation.ui.carddetailscreen.CardDetailsActivity;
-import com.example.ekta.evaluation.utilities.ContactsDialogFragment;
+import com.example.ekta.evaluation.utilities.RechargeUtils;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class RechargeActivity extends AppCompatActivity implements AdapterView
         .OnItemSelectedListener {
+    private static final String TAG = RechargeActivity.class.getSimpleName();
+    private RechargeDetailAdapter mRechargeDetailAdapter;
+
     private AppCompatEditText mMobileNumberEditText;
     private AppCompatEditText mAmountEditText;
     private String mOperatorName;
@@ -45,40 +55,52 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
 
 
     private void init() {
-        AppCompatSpinner operatorNameSpinner = (AppCompatSpinner) findViewById(R.id.operator_name);
+        final AppCompatSpinner operatorNameSpinner = (AppCompatSpinner) findViewById(R.id.operator_name);
         setAdapterForSpinners(operatorNameSpinner, R.array.operators_array);
         mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
 
         mMobileNumberEditText = (AppCompatEditText) findViewById(R.id.contact_number);
+        mMobileNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.e(TAG, "beforeTextChanged: s: " + s );
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                Log.e(TAG, "onTextChanged: s: " + s );
+                if (s.length() >= Constants.FOUR) {
+                    String currentNumber = s.toString();
+                    String firstFourDigits = currentNumber.substring(Constants.BEGIN_INDEX, Constants.END_INDEX);
+                    Log.e(TAG, "onTextChanged: firstFourDigits: " + firstFourDigits );
+                    operatorNameSpinner.setSelection(RechargeUtils.getOperatorIndex(firstFourDigits));
+                } else {
+                    operatorNameSpinner.setSelection(Constants.AIRTEL_CODE);
+                }
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e(TAG, "afterTextChanged: s: " + s );
+
+            }
+        });
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recharge_history_list);
-        RechargeDetailAdapter rechargeDetailAdapter = new RechargeDetailAdapter(App
+        mRechargeDetailAdapter = new RechargeDetailAdapter(App
                 .getDataRepository().getSuccessfulRechargeDetailList());
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(linearLayoutManager);
-        recyclerView.setAdapter(rechargeDetailAdapter);
-        /*mMobileNumberEditText.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                if(MotionEvent.ACTION_UP == event.getAction()) {
-                    View horizontalView = findViewById(R.id.horizontal_view);
-                    horizontalView.setBackgroundColor(ContextCompat.getColor(RechargeActivity.this, R
-                            .color
-                            .colorPrimaryDark));
-                }
-
-                return false; // return is important...
-            }
-        });*/
-
-//        mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
+        recyclerView.setAdapter(mRechargeDetailAdapter);
         setRestrictions();
-        /*findViewById(R.id.cancel_action).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                onBackPressed();
-            }
-        });*/
+
         initClickListeners();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        mRechargeDetailAdapter.addToList(App.getDataRepository().getSuccessfulRechargeDetailList());
+        mRechargeDetailAdapter.notifyDataSetChanged();
     }
 
     private void setAdapterForSpinners(AppCompatSpinner operatorNameSpinner, int array_list) {
@@ -90,6 +112,49 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
         adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
 // Apply the adapter to the mOperatorNameSpinner
         operatorNameSpinner.setAdapter(adapter);
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        switch (requestCode) {
+            case Constants.CONTACTS_REQUEST_CODE:
+                if (resultCode == Activity.RESULT_OK) {
+                    String phoneNo = null;
+                    String name = null;
+
+                    Uri contactData = data.getData();
+                    Cursor cursor = getContentResolver().query(contactData, null, null, null, null);
+                    if (cursor.moveToFirst()) {
+
+                        String id = cursor.getString(cursor.getColumnIndexOrThrow
+                                (ContactsContract.Contacts._ID));
+
+                        String hasPhone = cursor.getString(cursor.getColumnIndex(ContactsContract
+                                .Contacts.HAS_PHONE_NUMBER));
+
+                        if (hasPhone.equalsIgnoreCase(Constants.ONE)) {
+                            Cursor phones = getContentResolver().query(
+                                    ContactsContract.CommonDataKinds.Phone.CONTENT_URI, null,
+                                    ContactsContract.CommonDataKinds.Phone.CONTACT_ID + " = " + id,
+                                    null, null);
+                            phones.moveToFirst();
+                            phoneNo = phones.getString(phones.getColumnIndex(Constants.DATA_1));
+                            phones.close();
+                        }
+                        name = cursor.getString(cursor.getColumnIndex(ContactsContract.Contacts
+                                .DISPLAY_NAME));
+                        cursor.close();
+
+                        phoneNo = RechargeUtils
+                                .getFormattedTenDigitMobileNumber(phoneNo);
+                        mMobileNumberEditText.setText(phoneNo);
+                    }
+                    Log.e(TAG, "Name and Contact number is " + name + ", " + phoneNo);
+                } else {
+                    Log.e(TAG, "onActivityResult: failed");
+                }
+        }
     }
 
     private void initClickListeners() {
@@ -116,9 +181,9 @@ public class RechargeActivity extends AppCompatActivity implements AdapterView
         findViewById(R.id.contacts).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                ContactsDialogFragment contactsDialogFragment = new ContactsDialogFragment();
-                contactsDialogFragment.show(getSupportFragmentManager(), ContactsDialogFragment
-                        .class.getSimpleName());
+                Intent intent = new Intent(Intent.ACTION_PICK);
+                intent.setType(ContactsContract.Contacts.CONTENT_TYPE);
+                startActivityForResult(intent, Constants.CONTACTS_REQUEST_CODE);
             }
         });
 

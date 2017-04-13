@@ -68,7 +68,7 @@ public class ContactsDialogFragment extends DialogFragment {
             int count = 0;
             final Uri contentUri = ContactsContract.CommonDataKinds.Phone.CONTENT_URI;
             final String selection = ContactsContract.Contacts.HAS_PHONE_NUMBER + " = '" + ("1") + "' AND  " +
-                    /*ContactsContract.CommonDataKinds.Phone.NUMBER + " REGEXP '" + StringUtils.AT_LEAST_10_DIGITS_IN_STRING_REG_EX + "'";*/
+                    /*ContactsContract.CommonDataKinds.Phone.NUMBER + " REGEXP '" + RechargeUtils.AT_LEAST_10_DIGITS_IN_STRING_REG_EX + "'";*/
                     " LENGTH (" + ContactsContract.CommonDataKinds.Phone.NUMBER + ") >= " + MIN_DIGITS_FOR_PHONE_NUMBER;
             final String[] projection = new String[]{ContactsContract.CommonDataKinds.Phone.RAW_CONTACT_ID,
                     ContactsContract.CommonDataKinds.Phone.DISPLAY_NAME,
@@ -101,7 +101,7 @@ public class ContactsDialogFragment extends DialogFragment {
                     contactList.add(contact);
 
                     final String tenDigitNumber;
-//                    tenDigitNumber = StringUtils.getFormattedTenDigitMobileNumber(phoneNumberWithoutChars);
+//                    tenDigitNumber = RechargeUtils.getFormattedTenDigitMobileNumber(phoneNumberWithoutChars);
                     tenDigitNumber = phoneNumberWithoutChars;
                     if (!addedNums.contains(tenDigitNumber)) {
                         addedNums.add(tenDigitNumber);

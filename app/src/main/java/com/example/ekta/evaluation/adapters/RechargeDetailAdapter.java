@@ -41,6 +41,10 @@ public class RechargeDetailAdapter extends RecyclerView.Adapter<RechargeDetailAd
 
     }
 
+    public void addToList(ArrayList<RechargeDetails> rechargeDetails) {
+        mRechargeDetails = rechargeDetails;
+    }
+
     @Override
     public int getItemCount() {
         return mRechargeDetails.size();
