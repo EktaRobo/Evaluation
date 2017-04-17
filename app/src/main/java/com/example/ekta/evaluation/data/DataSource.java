@@ -1,5 +1,8 @@
 package com.example.ekta.evaluation.data;
 
+import android.content.ContentResolver;
+import android.content.Intent;
+
 import com.example.ekta.evaluation.data.database.models.SavedCard;
 import com.example.ekta.evaluation.models.RechargeDetails;
 import com.stripe.android.model.Token;
@@ -17,6 +20,8 @@ public interface DataSource {
     ArrayList<SavedCard> getSavedCards();
 
     void saveRechargeDetails(RechargeDetails rechargeDetails);
+
+    String getMobileNumber(Intent data, ContentResolver contentProvider);
 
     ArrayList<RechargeDetails> getSuccessfulRechargeDetailList();
 
