@@ -78,8 +78,6 @@ public class CardDetailsActivity extends AppCompatActivity implements OnSavedCar
 
     @Override
     public void onSavedCardClicked(SavedCard savedCard) {
-//        displayToast(savedCard.getTokenId());
-//        mPresenter.makePayment(getRechargeDetails(), savedCard.getTokenId());
         mSavedCard = savedCard;
     }
 

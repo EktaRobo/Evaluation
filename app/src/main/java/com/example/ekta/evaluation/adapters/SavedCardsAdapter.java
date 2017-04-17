@@ -69,14 +69,6 @@ public class SavedCardsAdapter extends RecyclerView.Adapter<SavedCardsAdapter
             super(itemView);
             mMaskedCardNumber = (TextView) itemView.findViewById(R.id.masked_card_number);
             mRadioButton = (AppCompatRadioButton) itemView.findViewById(R.id.radio_button);
-            /*mRadioButton.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    mSavedCardClickedListener.onSavedCardClicked(mSavedCards.get(getAdapterPosition
-                            ()));
-                }
-            });*/
-
             mRadioButton.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
