@@ -12,14 +12,20 @@ import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.AppCompatSpinner;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.InputFilter;
+import android.text.TextWatcher;
+import android.text.method.DigitsKeyListener;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ekta.evaluation.R;
+import com.example.ekta.evaluation.adapters.RechargeDetailAdapter;
 import com.example.ekta.evaluation.application.App;
 import com.example.ekta.evaluation.constants.Constants;
 import com.example.ekta.evaluation.models.RechargeDetails;
@@ -27,12 +33,14 @@ import com.example.ekta.evaluation.ui.carddetailscreen.CardDetailsActivity;
 
 @RequiresApi(api = Build.VERSION_CODES.JELLY_BEAN_MR1)
 public class RechargeActivity extends AppCompatActivity implements RechargeContract.View, View
-        .OnClickListener {
+        .OnClickListener, AdapterView.OnItemSelectedListener {
     private static final String TAG = RechargeActivity.class.getSimpleName();
     private RechargeContract.Presenter mPresenter;
     private AppCompatEditText mMobileNumberEditText;
     private AppCompatEditText mAmountEditText;
     private AppCompatSpinner mOperatorNameSpinner;
+    private RechargeDetailAdapter mRechargeDetailAdapter;
+    private String mOperatorName;
 
 
     @Override
@@ -55,8 +63,8 @@ public class RechargeActivity extends AppCompatActivity implements RechargeContr
     private void initEditTextViews() {
         mAmountEditText = (AppCompatEditText) findViewById(R.id.amount);
         mMobileNumberEditText = (AppCompatEditText) findViewById(R.id.contact_number);
-        mPresenter.setEditTextRestrictions(mMobileNumberEditText, mAmountEditText);
-        mPresenter.addTextChangeListener(mMobileNumberEditText, mOperatorNameSpinner);
+        setEditTextRestrictions();
+        addTextChangeListener();
     }
 
     private void initSpinnerAdapter() {
@@ -64,21 +72,82 @@ public class RechargeActivity extends AppCompatActivity implements RechargeContr
         // Create an ArrayAdapter using the string array and a default mOperatorNameSpinner layout
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,
                 R.array.operators_array, android.R.layout.simple_spinner_item);
-        mPresenter.setAdapterForSpinners(mOperatorNameSpinner, adapter);
+        setAdapterForSpinners(adapter);
+    }
+
+    public void setAdapterForSpinners(ArrayAdapter<CharSequence> adapter) {
+
+        mOperatorNameSpinner.setOnItemSelectedListener(this);
+// Specify the layout to use when the list of choices appears
+        adapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+// Apply the adapter to the mOperatorNameSpinner
+        mOperatorNameSpinner.setAdapter(adapter);
     }
 
 
     private void initRecyclerView() {
         RecyclerView recyclerView = (RecyclerView) findViewById(R.id.recharge_history_list);
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        mPresenter.setRecyclerViewAdapter(recyclerView, linearLayoutManager);
+        setRecyclerViewAdapter(recyclerView, linearLayoutManager);
+    }
+
+    public void setRecyclerViewAdapter(RecyclerView recyclerView, RecyclerView.LayoutManager
+            linearLayoutManager) {
+        if (mPresenter == null) {
+            return;
+        }
+        mRechargeDetailAdapter = new RechargeDetailAdapter(mPresenter
+                .getSuccessfulRechargeDetailList());
+        recyclerView.setLayoutManager(linearLayoutManager);
+        recyclerView.setAdapter(mRechargeDetailAdapter);
+    }
+
+    private void addTextChangeListener() {
+        mMobileNumberEditText.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+                Log.e(TAG, "beforeTextChanged: s: " + s);
+            }
+
+            @Override
+            public void onTextChanged(CharSequence charSequence, int start, int before, int count) {
+                Log.e(TAG, "onTextChanged: charSequence: " + charSequence);
+                mPresenter.changeOperatorName(charSequence);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                Log.e(TAG, "afterTextChanged: s: " + s);
+
+            }
+        });
+    }
+
+    @Override
+    public void setSelectedOperator(int operatorCode) {
+        mOperatorNameSpinner.setSelection(operatorCode);
+    }
+
+    private void setEditTextRestrictions() {
+        mMobileNumberEditText.setKeyListener(new DigitsKeyListener());
+        mAmountEditText.setKeyListener(new DigitsKeyListener());
+        mMobileNumberEditText.setFilters(new InputFilter[]{new InputFilter.LengthFilter(
+                Constants.MAX_LENGTH_MOBILE)});
     }
 
 
     @Override
     protected void onResume() {
         super.onResume();
-        mPresenter.refreshRechargeHistory();
+        refreshRechargeHistory();
+    }
+
+    private void refreshRechargeHistory() {
+        if (mPresenter == null) {
+            return;
+        }
+        mRechargeDetailAdapter.addToList(mPresenter.getSuccessfulRechargeDetailList());
+        mRechargeDetailAdapter.notifyDataSetChanged();
     }
 
 
@@ -120,7 +189,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeContr
     }
 
     @Override
-    public void setSelectedOperator(TextView selectedText) {
+    public void customizeSelectedOperator(TextView selectedText) {
         selectedText.setTextColor(ContextCompat.getColor(this, R.color.colorPrimaryDark));
         selectedText.setGravity(Gravity.RIGHT);
     }
@@ -136,7 +205,7 @@ public class RechargeActivity extends AppCompatActivity implements RechargeContr
             case R.id.recharge:
                 String mobile = mMobileNumberEditText.getText().toString();
                 String amount = mAmountEditText.getText().toString();
-                mPresenter.validateRechargeData(mobile, amount);
+                mPresenter.validateRechargeData(mobile, amount, mOperatorName);
                 break;
 
             case R.id.contacts:
@@ -148,4 +217,19 @@ public class RechargeActivity extends AppCompatActivity implements RechargeContr
 
     }
 
+    @Override
+    public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+        TextView selectedText = (TextView) parent.getChildAt(0);
+        if (selectedText != null) {
+            customizeSelectedOperator(selectedText);
+        }
+
+        mOperatorName = (String) parent.getItemAtPosition(position);
+    }
+
+
+    @Override
+    public void onNothingSelected(AdapterView<?> parent) {
+
+    }
 }

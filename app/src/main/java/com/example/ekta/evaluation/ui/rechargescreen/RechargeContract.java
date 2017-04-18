@@ -2,13 +2,11 @@ package com.example.ekta.evaluation.ui.rechargescreen;
 
 import android.content.ContentResolver;
 import android.content.Intent;
-import android.support.v7.widget.AppCompatEditText;
-import android.support.v7.widget.AppCompatSpinner;
-import android.support.v7.widget.RecyclerView;
-import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.ekta.evaluation.models.RechargeDetails;
+
+import java.util.ArrayList;
 
 /**
  * Created by ekta on 17/4/17.
@@ -19,7 +17,9 @@ public interface RechargeContract {
     interface View {
         void initUI();
 
-        void setSelectedOperator(TextView selectedText);
+        void setSelectedOperator(int operatorCode);
+
+        void customizeSelectedOperator(TextView selectedText);
 
         void setMobileNumber(String mobileNumber);
 
@@ -34,23 +34,14 @@ public interface RechargeContract {
     interface Presenter {
         void start();
 
-        void setEditTextRestrictions(AppCompatEditText mobileEditText, AppCompatEditText
-                amountEditText);
+        ArrayList<RechargeDetails> getSuccessfulRechargeDetailList();
 
-        void addTextChangeListener(AppCompatEditText mobileEditText, AppCompatSpinner
-                operatorSpinner);
-
-        void setAdapterForSpinners(AppCompatSpinner operatorNameSpinner, ArrayAdapter<CharSequence> adapter);
-
-        void setRecyclerViewAdapter(RecyclerView recyclerView, RecyclerView.LayoutManager
-                linearLayoutManager);
-
-        void refreshRechargeHistory();
+        void changeOperatorName(CharSequence charSequence);
 
         void setSelectedContactNumber(Intent data, ContentResolver contentResolver);
 
-        void validateRechargeData(String mobile, String amount);
+        void validateRechargeData(String mobile, String amount, String operatorName);
 
-        RechargeDetails fetchRechargeDetails(String mobile, String amount);
+        RechargeDetails fetchRechargeDetails(String mobile, String amount, String operatorName);
     }
 }
